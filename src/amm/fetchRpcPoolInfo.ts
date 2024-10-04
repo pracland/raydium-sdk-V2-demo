@@ -18,5 +18,19 @@ export const fetchRpcPoolInfo = async () => {
   // console.log('amm pool infos:', res)
 }
 
+export const fetchRpcPoolInfo2 = async () => {
+  const raydium = await initSdk()
+  // RAY-SOL
+  const pool1 = 'AktFPEWMG5Xe9Sz1UxTgDtda8Akjpw6dZEbDSXfEmqaV'
+
+  const res = await raydium.liquidity.getRpcPoolInfos([pool1])
+
+  const pool1Info = res[pool1]
+
+  console.log('newMint-mSOL pool price:', pool1Info.poolPrice)
+
+  // console.log('amm pool infos:', res)
+}
+
 /** uncomment code below to execute */
-fetchRpcPoolInfo()
+fetchRpcPoolInfo2()

@@ -1,4 +1,13 @@
-import { RAYMint, USDCMint, OPEN_BOOK_PROGRAM, DEVNET_PROGRAM_ID, WSOLMint } from '@raydium-io/raydium-sdk-v2'
+import {
+  RAYMint,
+  USDCMint,
+  OPEN_BOOK_PROGRAM,
+  DEVNET_PROGRAM_ID,
+  WSOLMint,
+  SOLMint,
+  mSOLMint,
+} from '@raydium-io/raydium-sdk-v2'
+import { PublicKey } from '@solana/web3.js'
 import { initSdk, txVersion } from '../config'
 
 export const createMarket = async () => {
@@ -9,17 +18,17 @@ export const createMarket = async () => {
 
   const { execute, extInfo, transactions } = await raydium.marketV2.create({
     baseInfo: {
-      mint: RAYMint,
+      mint: mSOLMint,
       decimals: 6,
     },
     quoteInfo: {
-      mint: USDCMint,
-      decimals: 9,
+      mint: new PublicKey('ETtBRd9zLSYpiXykdf6t21JvrPJL5xtRu5n84oX3ySAp'),
+      decimals: 6,
     },
     lotSize: 1,
     tickSize: 0.01,
-    dexProgramId: OPEN_BOOK_PROGRAM,
-    // dexProgramId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET, // devnet
+    // dexProgramId: OPEN_BOOK_PROGRAM,
+    dexProgramId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET, // devnet
 
     // requestQueueSpace: 5120 + 12, // optional
     // eventQueueSpace: 262144 + 12, // optional
@@ -53,4 +62,4 @@ export const createMarket = async () => {
 }
 
 /** uncomment code below to execute */
-// createMarket()
+createMarket()

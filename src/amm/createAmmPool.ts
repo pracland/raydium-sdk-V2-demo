@@ -12,7 +12,7 @@ import BN from 'bn.js'
 
 export const createAmmPool = async () => {
   const raydium = await initSdk()
-  const marketId = new PublicKey(`<you market id here>`)
+  const marketId = new PublicKey('HGgwz875WR9hpZKC7KZSQvoqZZfhqCRf4xbnPoHGeup')
 
   // if you are confirmed your market info, don't have to get market info from rpc below
   const marketBufferInfo = await raydium.connection.getAccountInfo(new PublicKey(marketId))
@@ -24,6 +24,9 @@ export const createAmmPool = async () => {
   const baseMintInfo = await raydium.token.getTokenInfo(baseMint)
   const quoteMintInfo = await raydium.token.getTokenInfo(quoteMint)
 
+  console.log('baseMintInfo', baseMintInfo)
+  console.log('quoteMintInfo', quoteMintInfo)
+
   if (
     baseMintInfo.programId !== TOKEN_PROGRAM_ID.toBase58() ||
     quoteMintInfo.programId !== TOKEN_PROGRAM_ID.toBase58()
@@ -34,12 +37,12 @@ export const createAmmPool = async () => {
   }
 
   const { execute, extInfo } = await raydium.liquidity.createPoolV4({
-    programId: AMM_V4,
-    // programId: DEVNET_PROGRAM_ID.AmmV4, // devnet
+    // programId: AMM_V4,
+    programId: DEVNET_PROGRAM_ID.AmmV4, // devnet
     marketInfo: {
       marketId,
-      programId: OPEN_BOOK_PROGRAM,
-      // programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET, // devent
+      // programId: OPEN_BOOK_PROGRAM,
+      programId: DEVNET_PROGRAM_ID.OPENBOOK_MARKET, // devent
     },
     baseMintInfo: {
       mint: baseMint,
@@ -49,12 +52,12 @@ export const createAmmPool = async () => {
       mint: quoteMint,
       decimals: quoteMintInfo.decimals, // if you know mint decimals here, can pass number directly
     },
-    baseAmount: new BN(1000),
-    quoteAmount: new BN(1000),
+    // baseAmount: new BN(30000),
+    // quoteAmount: new BN(30000),
 
     // sol devnet faucet: https://faucet.solana.com/
-    // baseAmount: new BN(4 * 10 ** 9), // if devent pool with sol/wsol, better use amount >= 4*10**9
-    // quoteAmount: new BN(4 * 10 ** 9), // if devent pool with sol/wsol, better use amount >= 4*10**9
+    baseAmount: new BN(4 * 10 ** 9), // if devent pool with sol/wsol, better use amount >= 4*10**9
+    quoteAmount: new BN(4 * 10 ** 9), // if devent pool with sol/wsol, better use amount >= 4*10**9
 
     startTime: new BN(0), // unit in seconds
     ownerInfo: {
@@ -62,8 +65,8 @@ export const createAmmPool = async () => {
     },
     associatedOnly: false,
     txVersion,
-    feeDestinationId: FEE_DESTINATION_ID,
-    // feeDestinationId: DEVNET_PROGRAM_ID.FEE_DESTINATION_ID, // devnet
+    // feeDestinationId: FEE_DESTINATION_ID,
+    feeDestinationId: DEVNET_PROGRAM_ID.FEE_DESTINATION_ID, // devnet
     // optional: set up priority fee here
     // computeBudgetConfig: {
     //   units: 600000,
@@ -88,4 +91,4 @@ export const createAmmPool = async () => {
 }
 
 /** uncomment code below to execute */
-// createAmmPool()
+createAmmPool()

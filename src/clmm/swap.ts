@@ -22,6 +22,8 @@ export const swap = async () => {
 
   const inputAmount = new BN(100)
 
+  console.log('clmm/swap.ts')
+
   if (raydium.cluster === 'mainnet') {
     // note: api doesn't support get devnet pool info, so in devnet else we go rpc method
     // if you wish to get pool info from rpc, also can modify logic to go rpc method directly
@@ -84,4 +86,4 @@ export const swap = async () => {
 }
 
 /** uncomment code below to execute */
-// swap()
+swap()

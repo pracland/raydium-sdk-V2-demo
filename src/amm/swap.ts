@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoStandardItem, AmmV4Keys, AmmRpcData } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoStandardItem, AmmV4Keys, AmmRpcData, mSOLMint } from '@raydium-io/raydium-sdk-v2'
 import { initSdk, txVersion } from '../config'
 import BN from 'bn.js'
 import { isValidAmm } from './utils'
@@ -7,9 +7,9 @@ import { NATIVE_MINT } from '@solana/spl-token'
 
 export const swap = async () => {
   const raydium = await initSdk()
-  const amountIn = 500
-  const inputMint = NATIVE_MINT.toBase58()
-  const poolId = '58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2' // SOL-USDC pool
+  const amountIn = 5 * 10 ** 8 // 0.5 mSOL
+  const inputMint = mSOLMint.toBase58()
+  const poolId = 'AktFPEWMG5Xe9Sz1UxTgDtda8Akjpw6dZEbDSXfEmqaV' // mSOL-Mytoken pool
 
   let poolInfo: ApiV3PoolInfoStandardItem | undefined
   let poolKeys: AmmV4Keys | undefined
@@ -86,6 +86,9 @@ export const swap = async () => {
     //   microLamports: 100000000,
     // },
   })
+
+  console.log('mintIn {}, ammount {}', mintIn, amountIn)
+  console.log('mintOut {}, amount {}', mintOut, out.minAmountOut)
 
   // don't want to wait confirm, set sendAndConfirm to false or don't pass any params to execute
   const { txId } = await execute({ sendAndConfirm: true })
